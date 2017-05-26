@@ -1,6 +1,6 @@
 # Poké.Net
 
-[![travis-ci Build Status](https://api.travis-ci.org/Bond-009/Poke.Net.svg?branch=master)](https://travis-ci.org/Bond-009/OpenWeather.Net)
+[![travis-ci Build Status](https://api.travis-ci.org/Bond-009/Poke.Net.svg?branch=master)](https://travis-ci.org/Bond-009/Poke.Net)
 [![Myget](https://img.shields.io/myget/bond_009/v/Poke.Net.svg)](https://www.myget.org/feed/Packages/bond_009)
 
 An unofficial .NET wrapper for the PokéApi

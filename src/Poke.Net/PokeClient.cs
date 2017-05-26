@@ -5,15 +5,33 @@ using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace Poke
 {
     public class PokeClient : IDisposable
     {
-        HttpClient httpclient = new HttpClient();
+        private static HttpClient _httpClient;
+        private readonly bool _useCache;
+        private readonly object _lockObject = new object();
+        private readonly MemoryCache _memoryCache;
+        private readonly TimeSpan _cacheExpiration;
 
-        public PokeClient()
-            => httpclient.BaseAddress = new Uri(Endpoints.BaseUrl);
+        public PokeClient(bool useCache = true, MemoryCacheOptions CacheOptions = null, TimeSpan? cacheExpiration = null)
+        {
+            if (_httpClient == null)
+            {
+                _httpClient = new HttpClient();
+                _httpClient.BaseAddress = new Uri(Endpoints.BaseUrl);
+            }
+
+            _useCache = useCache;
+            if (_useCache)
+            {
+                _memoryCache = new MemoryCache(CacheOptions ?? new MemoryCacheOptions());
+                _cacheExpiration = cacheExpiration ?? new TimeSpan(0, 5, 0);
+            }
+        }
 
         public Task<Berry> GetBerryAsync(string name)
         {
@@ -64,11 +82,31 @@ namespace Poke
         /// <summary>
         /// Releases the unmanaged resources and disposes of the managed resources used.
         /// </summary>
-        public void Dispose() => httpclient.Dispose();
+        public void Dispose() => _memoryCache.Dispose();
 
         private async Task<T> GetObject<T>(string endpoint, string param)
+        {
+            if (!_useCache) return await DeserializeObject<T>(endpoint, param);
+
+            T temp = _memoryCache.Get<T>(typeof(T).Name + param);
+
+            if (temp != null) return temp;
+
+            lock (_lockObject)
+            {
+                temp = _memoryCache.Get<T>(typeof(T).Name + param);
+
+                if (temp != null) return temp;
+
+                temp = DeserializeObject<T>(endpoint, param).GetAwaiter().GetResult();
+                _memoryCache.Set<T>(typeof(T).Name + param, temp, _cacheExpiration);
+                return temp;
+            }
+        }
+
+        private async Task<T> DeserializeObject<T>(string endpoint, string param)
             => JsonConvert.DeserializeObject<T>(
-                    await httpclient.GetStringAsync(endpoint + "/" + param)
+                    await _httpClient.GetStringAsync(endpoint + "/" + param)
                 );
     }
 }

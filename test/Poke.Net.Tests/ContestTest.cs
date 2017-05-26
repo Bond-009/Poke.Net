@@ -10,17 +10,20 @@ namespace Poke.Tests
     {
         PokeClient client = new PokeClient();
 
-        [Fact]
-        public Task GetContestTypeTest()
-            => client.GetContestTypeAsync(1);
+        [Theory]
+        [InlineData(1)]
+        public Task GetContestTypeTest(int id)
+            => client.GetContestTypeAsync(id);
 
-        [Fact]
-        public Task GetContestEffectTest()
-            => client.GetContestEffectAsync(1);
+        [Theory]
+        [InlineData(1)]
+        public Task GetContestEffectTest(int id)
+            => client.GetContestEffectAsync(id);
 
-        [Fact]
-        public Task GetSuperContestEffectTest()
-            => client.GetSuperContestEffectAsync(1);
+        [Theory]
+        [InlineData(1)]
+        public Task GetSuperContestEffectTest(int id)
+            => client.GetSuperContestEffectAsync(id);
 
         public void Dispose() => client.Dispose();
     }

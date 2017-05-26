@@ -12,5 +12,8 @@ namespace Poke
         public const string ContestType = APIV2 + "/contest-type";
         public const string ContestEffect = APIV2 + "/contest-effect";
         public const string SuperContestEffect = APIV2 + "/super-contest-effect";
+        public const string EncounterMethod = APIV2 + "/encounter-method";
+        public const string EncounterCondition = APIV2 + "/encounter-condition";
+        public const string EncounterConditionValue = APIV2 + "/encounter-condition-value";
     }
 }
