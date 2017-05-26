@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <Authors>https://github.com/Bond_009/Poke.Net/graphs/contributors</Authors>
+    <PackageId>OpenWeather.Net</PackageId>
+    <ProjectUrl>https://github.com/Bond-009/Poke.Net</ProjectUrl>
+    <Version>0.1.0</Version>
+  </PropertyGroup>
+
+  <PropertyGroup Label="Configuration">
+    <AssemblyName>Poke.Net</AssemblyName>
+    <DocumentationFile>bin\Release\Poke.Net.xml</DocumentationFile>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <TargetFrameworks>netstandard1.1;net45</TargetFrameworks>
+  </PropertyGroup>
+  
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="10.0.2" />
+  </ItemGroup>
+  
+  <ItemGroup Condition="'$(TargetFramework)' == 'net45'">
+    <Reference Include="System.Net.Http" />
+  </ItemGroup>
+
+</Project>
