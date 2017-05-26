@@ -2,7 +2,7 @@ using Newtonsoft.Json;
 
 namespace Poke
 {
-    public class Resource
+    public class Resource : IResource
     {
         /// <summary>
         /// The identifier for this resource

@@ -25,25 +25,41 @@ namespace Poke
         public Task<Berry> GetBerryAsync(int id)
             => GetObject<Berry>(Endpoints.Berry, id.ToString());
 
-        public Task<BerryFirmnesses> GetBerryFirmnessesAsync(string name)
+        public Task<BerryFirmness> GetBerryFirmnessAsync(string name)
         {
             if (string.IsNullOrEmpty(name)) throw new ArgumentNullException("name");
 
-            return GetObject<BerryFirmnesses>(Endpoints.BerryFirmnesses, name);
+            return GetObject<BerryFirmness>(Endpoints.BerryFirmness, name);
         }
 
-        public Task<BerryFirmnesses> GetBerryFirmnessesAsync(int id)
-            => GetObject<BerryFirmnesses>(Endpoints.BerryFirmnesses, id.ToString());
+        public Task<BerryFirmness> GetBerryFirmnessAsync(int id)
+            => GetObject<BerryFirmness>(Endpoints.BerryFirmness, id.ToString());
 
-        public Task<BerryFlavors> GetBerryFlavorsAsync(string name)
+        public Task<BerryFlavor> GetBerryFlavorAsync(string name)
         {
             if (string.IsNullOrEmpty(name)) throw new ArgumentNullException("name");
 
-            return GetObject<BerryFlavors>(Endpoints.BerryFlavors, name);
+            return GetObject<BerryFlavor>(Endpoints.BerryFlavor, name);
         }
 
-        public Task<BerryFlavors> GetBerryFlavorsAsync(int id)
-            => GetObject<BerryFlavors>(Endpoints.BerryFlavors, id.ToString());
+        public Task<BerryFlavor> GetBerryFlavorAsync(int id)
+            => GetObject<BerryFlavor>(Endpoints.BerryFlavor, id.ToString());
+
+        public Task<ContestType> GetContestTypeAsync(string name)
+        {
+            if (string.IsNullOrEmpty(name)) throw new ArgumentNullException("name");
+
+            return GetObject<ContestType>(Endpoints.ContestType, name);
+        }
+
+        public Task<ContestType> GetContestTypeAsync(int id)
+            => GetObject<ContestType>(Endpoints.ContestType, id.ToString());
+
+        public Task<ContestEffect> GetContestEffectAsync(int id)
+            => GetObject<ContestEffect>(Endpoints.ContestEffect, id.ToString());
+
+        public Task<SuperContestEffect> GetSuperContestEffectAsync(int id)
+            => GetObject<SuperContestEffect>(Endpoints.SuperContestEffect, id.ToString());
 
         /// <summary>
         /// Releases the unmanaged resources and disposes of the managed resources used.

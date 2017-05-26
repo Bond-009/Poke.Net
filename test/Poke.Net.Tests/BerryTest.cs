@@ -15,12 +15,12 @@ namespace Poke.Tests
             => client.GetBerryAsync(1);
 
         [Fact]
-        public Task GetBerryFirmnessesTest()
-            => client.GetBerryFirmnessesAsync(1);
+        public Task GetBerryFirmnessTest()
+            => client.GetBerryFirmnessAsync(1);
 
         [Fact]
-        public Task GetBerryFlavorsTest()
-            => client.GetBerryFlavorsAsync(1);
+        public Task GetBerryFlavorTest()
+            => client.GetBerryFlavorAsync(1);
 
         public void Dispose() => client.Dispose();
     }
