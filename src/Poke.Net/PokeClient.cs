@@ -79,6 +79,36 @@ namespace Poke
         public Task<SuperContestEffect> GetSuperContestEffectAsync(int id)
             => GetObject<SuperContestEffect>(Endpoints.SuperContestEffect, id.ToString());
 
+        public Task<EncounterMethod> GetEncounterMethodAsync(string name)
+        {
+            if (string.IsNullOrEmpty(name)) throw new ArgumentNullException("name");
+
+            return GetObject<EncounterMethod>(Endpoints.EncounterMethod, name);
+        }
+
+        public Task<EncounterMethod> GetEncounterMethodAsync(int id)
+            => GetObject<EncounterMethod>(Endpoints.EncounterMethod, id.ToString());
+
+        public Task<EncounterCondition> GetEncounterConditionAsync(string name)
+        {
+            if (string.IsNullOrEmpty(name)) throw new ArgumentNullException("name");
+
+            return GetObject<EncounterCondition>(Endpoints.EncounterCondition, name);
+        }
+
+        public Task<EncounterCondition> GetEncounterConditionAsync(int id)
+            => GetObject<EncounterCondition>(Endpoints.EncounterCondition, id.ToString());
+
+        public Task<EncounterCondition> GetEncounterConditionValueAsync(string name)
+        {
+            if (string.IsNullOrEmpty(name)) throw new ArgumentNullException("name");
+
+            return GetObject<EncounterCondition>(Endpoints.EncounterCondition, name);
+        }
+
+        public Task<EncounterCondition> GetEncounterConditionValueAsync(int id)
+            => GetObject<EncounterCondition>(Endpoints.EncounterCondition, id.ToString());
+
         /// <summary>
         /// Releases the unmanaged resources and disposes of the managed resources used.
         /// </summary>

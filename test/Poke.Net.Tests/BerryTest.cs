@@ -10,17 +10,20 @@ namespace Poke.Tests
     {
         PokeClient client = new PokeClient();
 
-        [Fact]
-        public Task GetBerryTest()
-            => client.GetBerryAsync(1);
+        [Theory]
+        [InlineData(1)]
+        public Task GetBerryTest(int id)
+            => client.GetBerryAsync(id);
 
-        [Fact]
-        public Task GetBerryFirmnessTest()
-            => client.GetBerryFirmnessAsync(1);
+        [Theory]
+        [InlineData(1)]
+        public Task GetBerryFirmnessTest(int id)
+            => client.GetBerryFirmnessAsync(id);
 
-        [Fact]
-        public Task GetBerryFlavorTest()
-            => client.GetBerryFlavorAsync(1);
+        [Theory]
+        [InlineData(1)]
+        public Task GetBerryFlavorTest(int id)
+            => client.GetBerryFlavorAsync(id);
 
         public void Dispose() => client.Dispose();
     }
