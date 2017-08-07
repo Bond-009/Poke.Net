@@ -7,7 +7,7 @@ namespace Poke
     /// Flavors determine whether a Pokémon will benefit or suffer from eating a berry based on their nature.
     /// Check out Bulbapedia for greater detail.
     /// </summary>
-    public class BerryFlavor : Resource
+    public class BerryFlavor : NamedResource
     {
         /// <summary>
         /// A list of the berries with this flavor

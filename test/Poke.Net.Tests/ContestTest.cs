@@ -13,17 +13,17 @@ namespace Poke.Tests
         [Theory]
         [InlineData(1)]
         public Task GetContestTypeTest(int id)
-            => client.GetContestTypeAsync(id);
+            => client.GetResourceAsync<ContestType>(id);
 
         [Theory]
         [InlineData(1)]
         public Task GetContestEffectTest(int id)
-            => client.GetContestEffectAsync(id);
+            => client.GetResourceAsync<ContestEffect>(id);
 
         [Theory]
         [InlineData(1)]
         public Task GetSuperContestEffectTest(int id)
-            => client.GetSuperContestEffectAsync(id);
+            => client.GetResourceAsync<SuperContestEffect>(id);
 
         public void Dispose() => client.Dispose();
     }

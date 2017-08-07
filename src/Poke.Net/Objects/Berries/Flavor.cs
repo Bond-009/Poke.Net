@@ -2,7 +2,7 @@ using Newtonsoft.Json;
 
 namespace Poke
 {
-    public class Flavor
+    public abstract class Flavor
     {
         /// <summary>
         /// How powerful the referenced flavor is for this berry

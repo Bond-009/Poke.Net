@@ -13,6 +13,6 @@ namespace Poke
         /// </summary>
         [JsonProperty("condition")]
         [JsonRequired]
-        public IEnumerable<NamedAPIResource> Condition { get; set; }
+        public NamedAPIResource Condition { get; set; }
     }
 }

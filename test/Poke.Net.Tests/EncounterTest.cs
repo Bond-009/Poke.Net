@@ -13,17 +13,17 @@ namespace Poke.Tests
         [Theory]
         [InlineData(1)]
         public Task GetEncounterMethodTest(int id)
-            => client.GetEncounterMethodAsync(id);
+            => client.GetResourceAsync<EncounterMethod>(id);
 
         [Theory]
         [InlineData(1)]
         public Task GetEncounterConditionTest(int id)
-            => client.GetEncounterConditionAsync(id);
+            => client.GetResourceAsync<EncounterCondition>(id);
 
         [Theory]
         [InlineData(1)]
         public Task GetEncounterConditionValueTest(int id)
-            => client.GetEncounterConditionValueAsync(id);
+            => client.GetResourceAsync<EncounterConditionValue>(id);
 
         public void Dispose() => client.Dispose();
     }

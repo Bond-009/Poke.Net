@@ -2,7 +2,7 @@ using Newtonsoft.Json;
 
 namespace Poke
 {
-    public class LanguageResource
+    public abstract class LanguageResource
     {
         /// <summary>
         /// The language this name is in

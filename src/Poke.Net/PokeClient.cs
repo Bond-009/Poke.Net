@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
+using System.Reflection;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Memory;
 
@@ -11,6 +13,9 @@ namespace Poke
 {
     public class PokeClient : IDisposable
     {
+        private const string BaseUrl = "http://pokeapi.co";
+        private const string APIV2 = "/api/v2";
+
         private static HttpClient _httpClient;
         private readonly bool _useCache;
         private readonly object _lockObject = new object();
@@ -22,7 +27,7 @@ namespace Poke
             if (_httpClient == null)
             {
                 _httpClient = new HttpClient();
-                _httpClient.BaseAddress = new Uri(Endpoints.BaseUrl);
+                _httpClient.BaseAddress = new Uri(BaseUrl);
             }
 
             _useCache = useCache;
@@ -33,110 +38,50 @@ namespace Poke
             }
         }
 
-        public Task<Berry> GetBerryAsync(string name)
-        {
-            if (string.IsNullOrEmpty(name)) throw new ArgumentNullException("name");
+        public Task<T> GetResourceAsync<T>(string name) where T : NamedResource
+            => getObject<T>(name);
 
-            return GetObject<Berry>(Endpoints.Berry, name);
-        }
-
-        public Task<Berry> GetBerryAsync(int id)
-            => GetObject<Berry>(Endpoints.Berry, id.ToString());
-
-        public Task<BerryFirmness> GetBerryFirmnessAsync(string name)
-        {
-            if (string.IsNullOrEmpty(name)) throw new ArgumentNullException("name");
-
-            return GetObject<BerryFirmness>(Endpoints.BerryFirmness, name);
-        }
-
-        public Task<BerryFirmness> GetBerryFirmnessAsync(int id)
-            => GetObject<BerryFirmness>(Endpoints.BerryFirmness, id.ToString());
-
-        public Task<BerryFlavor> GetBerryFlavorAsync(string name)
-        {
-            if (string.IsNullOrEmpty(name)) throw new ArgumentNullException("name");
-
-            return GetObject<BerryFlavor>(Endpoints.BerryFlavor, name);
-        }
-
-        public Task<BerryFlavor> GetBerryFlavorAsync(int id)
-            => GetObject<BerryFlavor>(Endpoints.BerryFlavor, id.ToString());
-
-        public Task<ContestType> GetContestTypeAsync(string name)
-        {
-            if (string.IsNullOrEmpty(name)) throw new ArgumentNullException("name");
-
-            return GetObject<ContestType>(Endpoints.ContestType, name);
-        }
-
-        public Task<ContestType> GetContestTypeAsync(int id)
-            => GetObject<ContestType>(Endpoints.ContestType, id.ToString());
-
-        public Task<ContestEffect> GetContestEffectAsync(int id)
-            => GetObject<ContestEffect>(Endpoints.ContestEffect, id.ToString());
-
-        public Task<SuperContestEffect> GetSuperContestEffectAsync(int id)
-            => GetObject<SuperContestEffect>(Endpoints.SuperContestEffect, id.ToString());
-
-        public Task<EncounterMethod> GetEncounterMethodAsync(string name)
-        {
-            if (string.IsNullOrEmpty(name)) throw new ArgumentNullException("name");
-
-            return GetObject<EncounterMethod>(Endpoints.EncounterMethod, name);
-        }
-
-        public Task<EncounterMethod> GetEncounterMethodAsync(int id)
-            => GetObject<EncounterMethod>(Endpoints.EncounterMethod, id.ToString());
-
-        public Task<EncounterCondition> GetEncounterConditionAsync(string name)
-        {
-            if (string.IsNullOrEmpty(name)) throw new ArgumentNullException("name");
-
-            return GetObject<EncounterCondition>(Endpoints.EncounterCondition, name);
-        }
-
-        public Task<EncounterCondition> GetEncounterConditionAsync(int id)
-            => GetObject<EncounterCondition>(Endpoints.EncounterCondition, id.ToString());
-
-        public Task<EncounterCondition> GetEncounterConditionValueAsync(string name)
-        {
-            if (string.IsNullOrEmpty(name)) throw new ArgumentNullException("name");
-
-            return GetObject<EncounterCondition>(Endpoints.EncounterCondition, name);
-        }
-
-        public Task<EncounterCondition> GetEncounterConditionValueAsync(int id)
-            => GetObject<EncounterCondition>(Endpoints.EncounterCondition, id.ToString());
+        public Task<T> GetResourceAsync<T>(int id) where T : Resource
+            => getObject<T>(id.ToString());
 
         /// <summary>
         /// Releases the unmanaged resources and disposes of the managed resources used.
         /// </summary>
         public void Dispose() => _memoryCache.Dispose();
 
-        private async Task<T> GetObject<T>(string endpoint, string param)
+        private async Task<T> getObject<T>(string param)
         {
-            if (!_useCache) return await DeserializeObject<T>(endpoint, param);
+            Type type = typeof(T);
+            TypeInfo typeInfo = type.GetTypeInfo();
+            if (typeInfo.IsAbstract ||
+                typeInfo.Namespace != this.GetType().GetTypeInfo().Namespace)
+            {
+                throw new Exception("You can't do that!!!");
+            }
 
-            T temp = _memoryCache.Get<T>(typeof(T).Name + param);
+            string relativeURL = APIV2 + "/" + Regex.Replace(type.Name, @"(?<=[a-z])([A-Z])", @"-$1").ToLower() + "/" + param;
+
+            if (!_useCache) return await deserializeObject<T>(relativeURL);
+
+            T temp = _memoryCache.Get<T>(relativeURL);
 
             if (temp != null) return temp;
 
             lock (_lockObject)
             {
-                temp = _memoryCache.Get<T>(typeof(T).Name + param);
+                temp = _memoryCache.Get<T>(relativeURL);
 
                 if (temp != null) return temp;
 
-                temp = DeserializeObject<T>(endpoint, param).GetAwaiter().GetResult();
-                _memoryCache.Set<T>(typeof(T).Name + param, temp, _cacheExpiration);
+                temp = deserializeObject<T>(relativeURL).GetAwaiter().GetResult();
+                _memoryCache.Set<T>(relativeURL, temp, _cacheExpiration);
                 return temp;
             }
         }
 
-        private async Task<T> DeserializeObject<T>(string endpoint, string param)
+        private async Task<T> deserializeObject<T>(string relativeURL)
             => JsonConvert.DeserializeObject<T>(
-                    await _httpClient.GetStringAsync(endpoint + "/" + param)
+                    await _httpClient.GetStringAsync(relativeURL).ConfigureAwait(false)
                 );
     }
 }

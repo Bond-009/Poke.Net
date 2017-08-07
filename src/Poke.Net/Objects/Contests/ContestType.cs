@@ -7,7 +7,7 @@ namespace Poke
     /// Contest types are categories judges used to weigh a Pokémon's condition in Pokémon contests.
     /// Check out Bulbapedia for greater detail.
     /// </summary>
-    public class ContestType : Resource
+    public class ContestType : NamedResource
     {
         /// <summary>
         /// The berry flavor that correlates with this contest type

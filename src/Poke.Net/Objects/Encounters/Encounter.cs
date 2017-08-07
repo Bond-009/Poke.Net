@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Poke
 {
-    public class Encounter : Resource
+    public abstract class Encounter : NamedResource
     {
         /// <summary>
         /// The name of this encounter listed in different languages

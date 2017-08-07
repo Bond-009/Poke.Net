@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Poke
 {
-    public class BerryFirmness : Resource
+    public class BerryFirmness : NamedResource
     {
         /// <summary>
         /// A list of the berries with this firmness

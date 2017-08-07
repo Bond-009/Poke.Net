@@ -8,7 +8,7 @@ namespace Poke
     /// stat enhancement, and even damage negation when eaten by Pokémon.
     /// Check out Bulbapedia for greater detail.
     /// </summary>
-    public class Berry : Resource
+    public class Berry : NamedResource
     {
         /// <summary>
         /// Time it takes the tree to grow one stage, in hours.

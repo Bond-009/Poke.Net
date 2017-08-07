@@ -6,14 +6,8 @@ namespace Poke
     /// <summary>
     /// Contest effects refer to the effects of moves when used in contests.
     /// </summary>
-    public class ContestEffectBase : IResource
+    public abstract class ContestEffectBase : Resource
     {
-        /// <summary>
-        /// The identifier for this contest type resource
-        /// </summary>
-        [JsonProperty("id")]
-        [JsonRequired]
-        public int ID { get; set; }
         /// <summary>
         /// The base number of hearts the user of this move gets
         /// </summary>
